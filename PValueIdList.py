@@ -94,7 +94,7 @@ class PValueIdList(gdb.Command):
             prefix = '.\n'
         
         info = prefix + '|   ' * level + '|-- ' + \
-            self.get_text(val) + ": " + str(self.get_oper(val)))
+            self.get_text(val) + ": " + str(self.get_oper(val))
         print(info)
         
         arity = self.get_arity(val)
