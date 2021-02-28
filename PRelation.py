@@ -3,11 +3,11 @@ import os
 import sys
 import gdb
 
-class PValueIdList(gdb.Command):
-    """Parse and print ValueIdList."""
+class PRelation(gdb.Command):
+    """Parse and print tree struct."""
 
     def __init__ (self):
-        super (PValueIdList, self).__init__ ('Pvil', gdb.COMMAND_USER)
+        super (PRelation, self).__init__ ('Prel', gdb.COMMAND_USER)
 
     def invoke (self, arg, from_tty):
         self.level = 0
@@ -18,8 +18,8 @@ class PValueIdList(gdb.Command):
         if self.val.type.code == gdb.TYPE_CODE_PTR:
             self.val = self.val.dereference()
         
-        self.display_entries(self.val, self.level)
-
+        self.display(self.val, self.level)
+    
     def get_call_str(self, val, method, param=None):
         call_str = '(*((' + str(val.dynamic_type) + '*)(' + \
             str(val.address) + '))).' + method
@@ -31,38 +31,29 @@ class PValueIdList(gdb.Command):
 
         return call_str
 
-    def get_data_str(self, val):
+    def get_call_ptr_str(self, val, method, param=None):
+        call_str = '((' + str(val.dynamic_type) + '*)(' + \
+            str(val.address) + '))->' + method
+        
+        if param == None:
+            call_str = call_str + '()'
+        else:
+            call_str = call_str + '(' + param + ')'
+
+        return call_str
+
+    def get_data_str(self, val, data):
         data_str = '(*((' + str(val.dynamic_type) + '*)(' + \
-            str(val.address) + ')))'
+            str(val.address) + '))).' + data
         
         return data_str
 
-    def get_entries_num(self, val):
-        entries_call_str = (self.get_call_str(val, 'entries'))
-        entries = gdb.parse_and_eval(entries_call_str)
+    def get_data_ptr_str(self, val, data):
+        data_str = '((' + str(val.dynamic_type) + '*)(' + \
+            str(val.address) + '))->' + data
         
-        return entries
+        return data_str
     
-    def get_entry(self, val, index):
-        entry_call_str = self.get_data_str(val) + \
-            '[' + str(index) + ']' + '.getItemExpr()'
-        entry = gdb.parse_and_eval(entry_call_str)
-
-        return entry.dereference()
-    
-    def display_entries(self, val, level):
-        entries_num = self.get_entries_num(val)
-        if entries_num > 0:
-            iter = 0;
-            while iter < entries_num:
-                print('Entries ' + str(iter) + ': ')
-                entry = self.get_entry(val, iter)
-                self.display(entry, level)
-                iter += 1
-        else:
-            print('Entries: None')
-    
-        
     def get_text(self, val):
         str_call_str = (self.get_call_str(val, 'getText') + '.data()')
         val_str = gdb.parse_and_eval(str_call_str)
@@ -94,7 +85,7 @@ class PValueIdList(gdb.Command):
             prefix = '.\n'
         
         info = prefix + '|   ' * level + '|-- ' + \
-            self.get_text(val) + ": " + str(self.get_oper(val)))
+            self.get_text(val) + ": " + str(self.get_oper(val))
         print(info)
         
         arity = self.get_arity(val)
@@ -103,5 +94,5 @@ class PValueIdList(gdb.Command):
             child = self.get_child(val, iter)
             self.display(child, level + 1)
             iter += 1
-    
-PValueIdList()
+
+PRelation()
