@@ -18,7 +18,7 @@ class PValueIdSet(gdb.Command):
             self.val = self.val.referenced_value()
         elif self.val.type.code == gdb.TYPE_CODE_PTR:
             self.val = self.val.dereference()
-        elif self.val.type.code == TYPE_CODE_STRUCT:
+        elif self.val.type.code == gdb.TYPE_CODE_STRUCT:
             pass
         else:
             print('Unknown Type')
