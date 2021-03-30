@@ -2,7 +2,12 @@
 import os
 import sys
 import gdb
-from StringIO import StringIO
+try:
+    import StringIO 
+except ImportError:
+    from io import StringIO
+
+#from StringIO import StringIO
 
 class SkipPlt(gdb.Command):
     """Greet the whole world."""
