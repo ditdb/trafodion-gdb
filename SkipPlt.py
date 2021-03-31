@@ -3,7 +3,7 @@ import os
 import sys
 import gdb
 try:
-    import StringIO 
+    from StringIO import StringIO
 except ImportError:
     from io import StringIO
 
