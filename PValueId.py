@@ -18,8 +18,9 @@ class PValueId(gdb.Command):
         if self.val.type.code == gdb.TYPE_CODE_PTR:
             self.val = self.val.dereference()
 
-        id = gdb.parse_and_eval(get_data_str('id_'))
-        item = gdb.parse_and_eval(get_call_str('getItemExpr')).dereference()
+        id = gdb.parse_and_eval(self.get_data_str(self.val, 'id_'))
+        item = gdb.parse_and_eval(self.get_call_str(self.val,
+        	'getItemExpr')).dereference()
         print(str(id))
         self.display(item, self.level)
     
