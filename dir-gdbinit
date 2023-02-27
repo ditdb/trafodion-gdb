@@ -1,0 +1,553 @@
+handle SIGSEGV pass noprint nostop
+set print thread-events 0
+set print elements unlimited
+set pagination off
+#set non-stop on
+
+set logging file mygdb.log
+set logging on
+
+#set verbose on
+set debug-file-directory /usr/local/lib/debug:/usr/lib/debug
+
+#target remote 10.10.14.7:8605
+#dir /opt/trafodion/mgj/esgyndb/core/sql/sqlci
+
+source /home/maguoji/gdb/SkipPlt.py
+source /home/maguoji/gdb/PValueIdSet.py
+source /home/maguoji/gdb/PValueIdList.py
+source /home/maguoji/gdb/PRelation.py
+source /home/maguoji/gdb/PItem.py
+source /home/maguoji/gdb/PPrinter.py
+source /home/maguoji/gdb/PValueId.py
+source /home/maguoji/gdb/PMapTable.py
+
+skip -rfu .*::child\\(
+skip -rfu ExprValueId::operator=
+skip -rfu ExprValueId::operator->
+skip -rfu ExprGroupId::operator->
+skip -rfu CmpCommon::statementHeap
+skip -rfu CmpCommon::statement
+skip -rfu CmpCommon::context
+skip -rfu NAList<*
+
+#b ulexer.cpp:1026
+#b BuiltinFunction::codeGen
+#b codeGen
+#b Cast::preCodeGen
+#b isCreatorProcessObsolete
+#b ComRtGetProcessCreateTime
+#b CmpMain::compile
+#b CmpSeabaseDDL::executeSeabaseDDL
+#commands
+#  silent
+#  printf "START\n"
+#  continue
+#end
+#b DateFormat::bindNode
+#b DateFormat::errorChecks
+#b ZZZBinderFunction::bindNode
+#b Substring::bindNode
+#b Substring::synthesizeType
+#b setSQLCODE
+#commands
+#  silent
+#  if newSQLCODE==100
+#    continue
+#  else
+#    printf "catch\n"
+#  end
+#end
+
+#b ExeCliInterface::executeImmediate
+#b ExeCliInterface::prepare
+#commands
+#  silent
+#  printf "%s\n\n", stmtStr
+#  continue
+#end
+
+#b ExeCliInterface::executeImmediatePrepare
+#tb finalizeSharedCache
+#tb validateInputNames
+#b CreateLmInputExpr
+#b DynamicParam
+#b processINlist
+#b bindNode
+#b createInvocationInfoFromRelExpr
+#b TableMappingUDF::bindNode
+#b ConstValue::codeGen
+#b Generator::genCode
+#b ExpGenerator::generateOutputExpr
+#b genItemExpr
+#b codegen_and_set_attributes
+
+#b RelExpr::bindChildren
+#b ExeUtilCreateTableAs::bindNode
+#b isAuthorizationEnabled
+#b getPrivileges
+#b getCurrentUser
+#b RelRoot::checkPrivileges
+#b NATable::NATable
+#b createNAFileSets
+#b NATable::getPrivileges
+#b CmpSeabaseDDL::verifyDDLCreateOperationAuthorized
+
+#b CmpSeabaseDDL::executeSeabaseDDL
+
+#b ItemExpr::bindNodeRoot
+#b Aggregate::bindNode
+#b Assign::bindNode
+#b ValueDescArray::insert
+
+#b castComputedColumnsToAnsiTypes
+#b SQLFloat::synthesizeType
+#b NumericType::synthesizeType
+#b ExpGenerator::matchScales
+#b ExpGenerator::matchScalesNoCast
+#b ExpGenerator::scaleBy10x
+#b ValueId
+
+#b CacheData::backpatchParams
+#b ConstValue::getExactNumericValue
+#b ex_comp_clause::eval
+#b ex_function_hash::eval
+#b ex_comp_clause::computeCaseIndex
+##b NumericType::synthesizeType
+##b literalToNumber
+##b literalToNumeric
+##b literalOfNumericWithScale
+##b literalOfNumericPassingScale.
+#b ConstValue::getConstValue
+#b ConstValue::ConstValue
+#b convDoIt
+#b Param::convertValue
+
+#b Descriptor::getDescItem
+#b SqlCmd::doDescribeInput
+
+#b Tuple::removeTupleExprTree
+#b CacheData::backpatchParams
+#b CacheWA::addConstParam
+#b ValueIdList::evalAtCompileTime
+#b ExpGenerator::generateContiguousMoveExpr
+
+#b ldap_sasl_bind
+#b ldap_unbind
+#b ldap_start_tls_s
+#b ldap_search_ext_s
+#b ldap_find_control
+#b ldap_parse_passwordpolicy_control
+#b ldap_initialize
+#b ldap_first_entry
+#b ldap_first_attribute
+
+#b setAuthenticationError
+#b srvrothers.cpp:6531
+#b dbUserAuth.cpp:1659
+#b isAuthorizationEnabled
+#b verifyDDLCreateOperationAuthorized
+
+#b bindRowValues
+#b bindUserInput
+#b SqlCmd::doDescribeInput
+#b Statement::execute
+#b InputOutputExpr::inputValues
+#b InputOutputExpr::outputValues
+#b ExExeUtilHBaseBulkLoadTcb::work
+#b ExExeUtilHBaseBulkLoadTcb::setCQDs
+#b ExExeUtilHBaseBulkLoadTcb::loadWithParams
+#b BiArith::synthesizeType
+#b BiRelat::bindNode
+#b Scan::bindNode
+#b RelRoot::bindNode
+#b GenericUpdate::bindNode
+#b Delete::bindNode
+#b Update::bindNode
+#b GenericUpdate::bindUpdateExpr
+#b createIMNode
+#b LeafDelete::bindNode
+#b createPartitioningFunctionForIndexDesc
+#b createPartitioningExpression()
+#b createPartitioningExpressionImp
+#b IndexDesc::IndexDesc
+#b setPartitioningFunction
+#b buildPartitioningExpression
+#b setComputedColumnExpr
+#b getComputedColumnExprString
+#b BindWA::bindView
+#b BindWA::getNATable
+#b NATableDB::get
+#b CmpSeabaseDDL::getSeabaseTableDesc
+#b CmpSeabaseDDL::getSeabaseUserTableDesc
+#b CmpSeabaseDDL::createSeabaseView
+#b CacheData::backpatchParams
+#b WriteAll
+#b ExExeUtilGetMetadataInfoTcb::work
+#b ExExeUtilGetMetadataInfoTcb::checkUserPrivs
+
+#b odbc_SQLSvc_GetSQLCatalogs_sme_
+#b ExExeUtilGetMetadataInfoTcb::work
+#b TypeInfo::getLong
+
+#b SRVR::BuildSQLDesc2
+#b setDescItem
+#b GetSqlcmpdbgExpFuncs
+
+#b init_platform
+#b processEvents
+#b guiDisplay
+
+#b convAsciiToFloat64
+#b ex_conv_clause
+#b setConvertNullWhenError
+#b BindWA::createTableDesc
+#b transform
+#b RenameTable::bindNode
+#b CmpSeabaseDDL::recreateUsingViews
+#b Delete::xformPartitionPruning
+#b Update::xformPartitionPruning
+#b Union::xformPartitionPruning
+#b ParInsertNameLoc
+#b corrNameFromStrings
+#b conditionalDelimit
+#b Generator::getMapInfo
+#b Generator::setMapTable
+#b Generator::appendAtEnd
+#b StmtDDLCleanupObjects::bindNode
+#b CmpSeabaseMDcleanup::cleanupObjects
+#b CmpSeabaseMDcleanup::cleanupSchemaObjects
+#b CmpSeabaseMDcleanup::cleanupOrphanObjectsEntries
+#b ExExtStorageScanTcb::createSQRowFromVectors
+#b ExpGenerator::generateOutputExpr
+
+#b Delete::bindNode
+#b handleInlining
+#b createOldAndNewCorrelationNames
+#b work
+#b deleteRows
+#b fixObjName4PartTbl
+
+#b ComTdbRoot::setQueryType
+#b setTupleAddress
+#b evalAtCompileTime
+#b RelRoot::codeGen
+#b setQueryType
+#b queryType
+#b CompilerStatsInfo::translateToExternalFormat
+#b dumpSeabaseSchemaDDL
+#b CmpDescribeRoutine
+#b CmpDescribe
+#b CmpDescribePackage
+#b createSeabasePackage
+
+#b Generator::preGenCode
+#b collectStatsType
+#b explainInRms
+#b computeStats
+#b setComputeStats
+#b NADefaults::getToken
+#b NADefaults::validateAndInsert
+#b ExOperStats::unpack
+#b ExOperStats::getVariableStatsInfo
+#b ExStatisticsArea::ExStatisticsArea
+#b ExStatisticsArea::get
+#b getCollectStatsType
+#b setCollectStatsType
+#b ExOperStats::merge
+#b ExExeUtilGetRTSStatisticsTcb::work
+#b ContextCli::GetStatistics2
+#b ExStatisticsArea::getStatsDesc
+#b ExStatisticsArea::ExStatisticsArea
+#b ContextCli::GetStatistics2
+#b SQLCLI_GetStatisticsItems
+
+#b RelExpr::optimizeNode
+#b Scan::addIndexInfo
+#b addToAvailableBtreeIndexes
+#b RelExpr::createPlan
+#b generateScanSubstitutes
+#b setIndexOnlyScans
+#b HbaseScanRule::nextSubstitute
+#b createAndInsertScan
+#b convAsciiToFloat64
+#b CmpSeabaseDDL::populateNgramIndexFromTable
+#b Generator::getMapInfo
+#b createIMNode
+#b TableMappingUDF::bindNode
+#b TMUDFInternalSetup::createInvocationInfoFromRelExpr
+#b udr_codegen
+#b TMUDFInternalSetup::setOffsets
+#b LeafDelete::bindNode
+#b Union::bindNode
+#b AuthConflictList::updatePrivs
+#b generate_ngram::describeParamsAndColumns
+#b generate_ngram::processData
+#b RenameTable::bindNode
+
+#b addOuterRef
+#b addOuterRefs
+#b mergeOuterRefs
+#b setCharacteristicInputs
+#b addCharacteristicInputs
+#b addCharacteristicInput
+#b setCharacteristicOutputs
+#b addCharacteristicOutput
+#b addCharacteristicOutputs
+#b PhysicalTableMappingUDF::codeGen
+#b ex_cri_desc
+#b ExUdrTcb::buildAndSendTmudfInput
+#b MergeUnion::codeGen
+#b udr_codegen
+#b BiRelat::preCodeGen
+#b NestedJoin::codeGen
+#b BaseColumn::codeGen
+#b setTupleDescriptor
+#b ShowStats
+#b HbaseUpdate::codeGen
+#b genHbaseUpdOrInsertExpr
+#b MapTable::addMapInfoToThis
+#b addEIC
+#b ValueDescArray::insert
+
+#b checkAndInsertRow
+#b createRangePartFuncForHbaseTableUsingStats
+#b createRangePartitionBoundariesFromStats
+#b FileScan::synthHbaseScanPhysicalProperty
+#b ReqdPhysicalProperty
+#b RelRoot::createContextForAChild
+#b ExpGenerator::endExprGen
+
+#b scmComputeCostVectorsMultiProbesForHbase
+#b SimpleFileScanOptimizer::estimateEffTotalRowCount
+#b SimpleFileScanOptimizer::scmComputeCostVectorsMultiProbes
+#b ScanOptimizer::useSimpleFileScanOptimizer
+#b FileScan
+#b generateScanSubstitutes
+#b Scan::addIndexInfo
+
+#b Insert::bindNode
+#b Insert::isUpsertThatNeedsTransformation
+#b Insert::xformUpsertToEfficientTree
+#b NestedJoin::codeGen
+#b invokeUdrMethod
+#b processUserException
+#b invokeRoutine
+#b literalOfNumericWithScale
+
+#b ex_function_encode::eval
+#b ExpGenerator::buildKeyInfo
+#b FileScan::preCodeGen
+#b FileScan::copyTopNode
+#b FileScan::processMinMaxKeys
+#b ExHbaseAccessTcb::setupSubsetRowIdsAndCols
+#b HbaseAccess::processSQHbaseKeyPreds
+#b HbaseAccess::genListsOfRows
+#b processConstHBaseKeys
+#b setSearchKey
+#b HbaseSearchKey::makeHBaseSearchKeys
+#b SearchKey::init
+#b SearchKeyWorkSpace::SearchKeyWorkSpace
+#b SearchKeyBounds::applyABoundForTheSearch
+#b SearchKeyBounds::isBoundExclusive
+#b ValueIdSet::referencesBignumNumericDataType
+#b literalOfNumericWithScale
+#b ExDDLwithStatusTcb::work
+#b ExDDLwithStatusTdb::build
+#b ValueIdSet::referencesBignumNumericDataType
+#b ex_conv_clause::eval
+#b BiArith::preCodeGen
+#b ex_arith_clause::eval
+#b 'operator new'
+#b ExDescribeTcb::work
+#b CmpDescribe
+#b HeapLogRoot::fetchLine
+#b HeapLogRoot::pack
+#b HeapLogRoot::deleteEntry
+#b HeapLog::addEntry
+#b HeapLogRoot::deleteLogSegment
+
+#b HeapLog.cpp:772
+#b ex_function_mod::eval
+#b Modulus::bindNode
+#b ValueId::getValueDesc
+
+#b InputStmt::pack
+#b NodeMap::codeGen
+#b getEspNodeMap
+#b ExRtFragTable::assignEsps
+#b ExEspNodeMap::setEntry
+#b RelRoot::codeGen
+#b validateAvailableNodes
+#b Generator::remapESPAllocation
+#b ExEspManager::getEspFromCache
+#b incrNumOfCliCalls
+#b ExRtFragTable::assignEsps
+
+#b ex_root.cpp:156
+#b ExRtFragTable::downloadAndFixup
+#b ex_send_bottom_tcb::work
+#b ex_split_bottom_tcb::work
+#b ex_split_top_tcb::work
+#b ex_split_bottom_tcb
+#b ex_split_top_tcb
+#b ex_hashj_tdb::build
+#b ex_split_bottom_tdb::buildESPTcbTree
+#b ex_split_bottom_tcb
+#b ex_split_bottom_tcb::workUp
+#b listen
+#b SockSocket::accept
+#b SockSocket::connect
+#b SockSocket::send
+#b SockSocket::receive
+#b DoEspStartup
+#b GuaConnectionToServer
+#b GuaConnectionToClient
+#b ExEspFragInstanceDir::work
+#b fs_int_fs_file_open_ph2
+#b ::connect
+#b ExMasterStmtGlobals
+#b ex_send_top_tdb::buildInstance
+#b ex_send_bottom_tdb::buildInstance
+#b msg_mon_accept_sock_cbt
+#b msg_mon_accept_sock_callback_create
+#b SB_Recv_Queue::add
+#b SB_Recv_Queue::add_at_front
+#b sb_timer_comp_q_get
+#b SB_Ms_Event_Mgr::set_event
+#b initiateReceive
+#b BMSG_LISTEN_common
+#b RelRoot::codeGen
+#b RequireSkewed
+#b RequireReplicateViaBroadcast
+#b createPlan
+#b createContextForAChild
+#b findOptimalSolution
+#b computeCostLimit
+#b synthPhysicalProperty
+#b ExHbaseAccessTcb::compareRowIds
+#b LmResultSetJava
+#b ExHbaseAccessTcb::missingValuesInAlignedFormatRow
+
+#b createSQRowDirect
+#b workReturnRightRows
+#b workProbe
+#b insertResult
+#b HashTable::position
+#b workDown
+#b workUp
+#b workReadInner
+#b workReadOuter
+#b Cluster::insert
+#b ex_hash_grby_tcb::workReturnRows
+
+#b SortGroupBy::addArrangementAndOrderRequirements
+#b SortGroupBy::synthPhysicalProperty
+#b GetColumns
+#b eval
+#b codeGen
+#b Exchange::codeGen
+#b ex_split_top_tcb::findNextReadyChild
+#b ex_function_encode::eval
+#b encodeKeyValue
+#b PhysicalTupleListRule::nextSubstitute
+#b PhysicalTupleListRule::topMatch
+#b RelExpr::createPlan
+#b CascadesPlan
+#b shareContext
+#b TMUDFInternalSetup::setTypeInfoFromNAType
+#b TableMappingUDF::bindNode
+#b TableMappingUDF::createOutputVids
+#b tokenize_func::describeParamsAndColumns
+#b QuantifiedComp::bindNode
+#b RelExpr::transformSelectPred
+#b getUserTextStr
+
+#b DISPATCH_TCPIPRequest
+#b GETTRANSID
+#b WRITE_TCPIP_RESPONSE
+#b SQL_EXEC_GetStatistics2
+#b SQL_EXEC_GetStatisticsItems
+#b GetStatementExecTime
+
+#b PerformanceMeasure::setOper
+#commands
+#  silent
+#  printf "%s, %d, %ld, %ld\n", "PerformanceMeasure::setOper", operationId, trandId, longQueryTime_
+#  continue
+#end
+
+#b PerformanceMeasure::getStmtPerfStats
+#commands
+#  silent
+#  bt
+#  printf "%s\n", "PerformanceMeasure::getStmtPerfStats"
+#  continue
+#end
+
+#b PerformanceMeasure::releaseStmtPerfStats
+#commands
+#  silent
+#  bt
+#  printf "%s\n", "PerformanceMeasure::releaseStmtPerfStats"
+#  continue
+#end
+
+#b StmtPerfStats::currMergePerfStats
+#commands
+#  silent
+#  printf "%s\n", "StmtPerfStats::currMergePerfStats"
+#  continue
+#end
+
+#b StmtPerfStats::oldMergePerfStats
+#commands
+#  silent
+#  printf "%s\n", "StmtPerfStats::oldMergePerfStats"
+#  continue
+#end
+
+#b StmtPerfStats::newMergePerfStats
+#commands
+#  silent
+#  printf "%s\n", "StmtPerfStats::newMergePerfStats"
+#  continue
+#end
+
+#b PerformanceMeasure::genSqlInfoStr
+#b odbc_SQLSrvr_Close_ame_
+#b PerformanceMeasure::isFinished
+#b PerformanceMeasure::netWriteStart
+
+#b SQLCLI_ExecDirect
+#b SQLCLI_Prepare_Setup_Pre
+#b ExSetSessionDefaultTcb::work
+#b ContextCli::GetStatistics2
+#b SRVR_STMT_HDL::allocSqlmxHdls
+#b SRVR::getSrvrStmt
+#b SQLEXECUTE_IOMessage
+#b Statement::fixup
+#b ExPTimeStats::stop
+#b SQLCLI_Prepare_Setup_Post
+#b setStmtStats
+#b setStatsArea
+#b ex_root_tdb::build
+#b StatsGlobals
+#b StatsGlobals::init
+#b doAllocateStatsEntry
+#b copyContents
+#b unpack
+#b copyOper
+#b getUserTextStr
+#b ConstValue
+#b RelRoot::bindNode
+#b getNextExplainNodeId
+#b addExplainInfo
+#b genCode
+#b PhysicalTableMappingUDF::codeGen
+#b ExExeUtilGetStatisticsTcb::work
+b getHTableClient
+b scanOpen
+b incHbaseCalls
+
+b bindNode

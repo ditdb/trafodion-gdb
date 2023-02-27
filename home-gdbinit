@@ -1,0 +1,7 @@
+set auto-load safe-path /usr/share/gdb/auto-load:.
+set auto-load libthread-db on
+
+set print array on
+set print pretty on
+set print object on
+set breakpoint pending on
