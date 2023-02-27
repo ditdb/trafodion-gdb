@@ -18,7 +18,7 @@ class Porca(gdb.Command):
         restr = re.sub('0x.* L"', '', restr)
         restr = re.sub(r'\\"', '', restr)
         restr = re.sub(r'(.*)"$', '\g<1>', restr)
-        restr = re.sub('", . . <repeats ([0-9]*) times>, "', extendSpace, restr)        
+        restr = re.sub('", . . <repeats ([0-9]*) times>, "', extendSpace, restr)
         restr = re.sub(r'\\n', '\n', restr)
         print(restr)
 
