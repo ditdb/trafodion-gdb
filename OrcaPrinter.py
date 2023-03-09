@@ -12,6 +12,11 @@ class Porca(gdb.Command):
         super (Porca, self).__init__ ('Porca', gdb.COMMAND_USER)
 
     def invoke (self, arg, from_tty):
+        val = gdb.parse_and_eval(arg)
+        if val.address == None or str(val.address) == '0x0':
+            print('The pointer is NULL')
+            return
+        
         call_str = str(arg) + '->DbgStr()'
         self.val = gdb.parse_and_eval(call_str)
         restr = str(self.val['_M_dataplus']['_M_p'])
